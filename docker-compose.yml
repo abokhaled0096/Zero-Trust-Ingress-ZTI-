@@ -1,0 +1,59 @@
+services:
+  gateway-service:
+    build: 
+      context: .
+      dockerfile: Dockerfile.gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis-service:6379
+      - DB_URL=postgresql://user:password@db-service:5432/security_logs
+      - AI_ANALYZER_URL=http://ai-analyzer-service:8001/analyze
+    depends_on:
+      - redis-service
+      - db-service
+    networks:
+      - security-net
+
+  ai-analyzer-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai
+    environment:
+      - REDIS_URL=redis://redis-service:6379
+      - DB_URL=postgresql://user:password@db-service:5432/security_logs
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    depends_on:
+      - redis-service
+      - db-service
+    networks:
+      - security-net
+
+  db-service:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=security_logs
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - security-net
+
+  redis-service:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - security-net
+
+networks:
+  security-net:
+
+volumes:
+  pgdata:
+  redisdata:

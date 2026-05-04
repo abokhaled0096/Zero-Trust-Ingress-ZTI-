@@ -1,0 +1,5 @@
+{
+    "whitelisted_ips": ["127.0.0.1"],
+    "strict_mode": true,
+    "score_threshold": 7
+}

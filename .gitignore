@@ -1,0 +1,30 @@
+# Security & Environment
+.env
+*.env
+.venv/
+env/
+venv/
+ENV/
+
+# Python Artifacts
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docker & Persistence
+# Note: These matches local volume mounts if used
+data/
+pgdata/
+redisdata/
+
+# Logs & Insights
+logs/*.log
+SECURITY_INSIGHTS.md
+*.report.md
+
+# OS specific
+.DS_Store
+Thumbs.db
